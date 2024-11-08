@@ -7,10 +7,8 @@ import java.awt.*;
 
 public class Clustering_GUI extends JFrame {
 
-    private static final Dimension PREFERED_DIMENSION = new Dimension(10000,1000);
-
     private final Clustering game;
-
+    private static final Dimension PREFERED_DIMENSION = new Dimension(1000,700);
     /*Barra superior*/
     private JMenuBar menuBar;
     private JMenu menu;
@@ -29,16 +27,16 @@ public class Clustering_GUI extends JFrame {
         this.game = new Clustering();
         this.prepareElements();
         this.prepareActions();
+        this.setVisible(true);
     }
 
 
     public static void main(String[] args){
         Clustering_GUI gui = new Clustering_GUI();
-        gui.setVisible(true);
     }
 
     private void prepareElements(){
-        JFrame frame = new JFrame("Clustering game");
+        this.setTitle("Clustering");
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
         menuBar.add(menu);
@@ -48,9 +46,9 @@ public class Clustering_GUI extends JFrame {
         menu.add(deleteTileMenuItem);
         exitGameMenuItem = new  JMenuItem("Exit");
         menu.add(exitGameMenuItem);
-        frame.setJMenuBar(menuBar);
-        frame.setSize(350,250);
-        frame.setVisible(true);
+        this.setJMenuBar(menuBar);
+        this.setSize(PREFERED_DIMENSION);
+        this.setVisible(true);
     }
 
     private void prepareActions() {
