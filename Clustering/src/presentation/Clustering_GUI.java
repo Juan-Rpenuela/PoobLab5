@@ -1,11 +1,13 @@
 package Clustering.src.presentation;
 
 import javax.swing.*;
-import src.*
+import Clustering.src.domain.Clustering;
+
+import java.awt.*;
 
 public class Clustering_GUI extends JFrame {
 
-    private static final Dimension PREFERED_DIMENSION = new Dimension(1000,200);
+    private static final Dimension PREFERED_DIMENSION = new Dimension(10000,1000);
 
     private final Clustering game;
 
@@ -25,9 +27,10 @@ public class Clustering_GUI extends JFrame {
 
     public Clustering_GUI(){
         this.game = new Clustering();
-        this.prepareElements;
-        this.prepareActions;
+        this.prepareElements();
+        this.prepareActions();
     }
+
 
     public static void main(String[] args){
         Clustering_GUI gui = new Clustering_GUI();
@@ -35,7 +38,7 @@ public class Clustering_GUI extends JFrame {
     }
 
     private void prepareElements(){
-        setTitle("Clustering game");
+        JFrame frame = new JFrame("Clustering game");
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
         menuBar.add(menu);
@@ -50,6 +53,7 @@ public class Clustering_GUI extends JFrame {
         frame.setVisible(true);
     }
 
-
+    private void prepareActions() {
+    }
 
 }
