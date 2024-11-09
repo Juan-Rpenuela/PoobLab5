@@ -4,6 +4,8 @@ import javax.swing.*;
 import Clustering.src.domain.Clustering;
 
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 public class Clustering_GUI extends JFrame {
 
@@ -39,7 +41,9 @@ public class Clustering_GUI extends JFrame {
         this.setTitle("Clustering");
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
+        config = new JMenu("Configuracion");
         menuBar.add(menu);
+        menuBar.add(config);
         createTileMenuItem = new JMenuItem("Create Tile");
         menu.add(createTileMenuItem);
         deleteTileMenuItem = new JMenuItem("Delete Tile");
@@ -49,9 +53,17 @@ public class Clustering_GUI extends JFrame {
         this.setJMenuBar(menuBar);
         this.setSize(PREFERED_DIMENSION);
         this.setVisible(true);
+        this.setLocationRelativeTo(null);
+        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
     private void prepareActions() {
+        this.addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent ev) {
+                setVisible(false);
+                System.exit(0);
+            }
+        });
     }
 
 }
