@@ -6,7 +6,8 @@ import Clustering.src.domain.Clustering;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-
+import java.io.File;
+import javax.swing.JFileChooser;
 public class Clustering_GUI extends JFrame {
 
     private final Clustering game;
@@ -73,6 +74,7 @@ public class Clustering_GUI extends JFrame {
             }
         });
 
+        //Acción de salir
        exitGameMenuItem.addActionListener(e->{
           int confirm = JOptionPane.showConfirmDialog(
                   null,
@@ -83,6 +85,31 @@ public class Clustering_GUI extends JFrame {
           if (confirm == JOptionPane.YES_OPTION){
               System.exit(0);
           }
+       });
+
+       //Acción de abrir archivos
+       open.addActionListener(e->{
+           JFileChooser fileChooser = new JFileChooser();
+           int result = fileChooser.showOpenDialog(null);
+           if (result == JFileChooser.APPROVE_OPTION){
+               File selectedFile = fileChooser.getSelectedFile();
+               JOptionPane.showMessageDialog(null,
+                       "Abrir archivo: " + selectedFile.getName(),
+                       "Abrir",
+                       JOptionPane.INFORMATION_MESSAGE);
+           }
+       });
+        //Acción de guardar archivos
+       save.addActionListener(e->{
+              JFileChooser fileChooser = new JFileChooser();
+              int result = fileChooser.showSaveDialog(null);
+              if (result == JFileChooser.APPROVE_OPTION){
+                File selectedFile = fileChooser.getSelectedFile();
+                JOptionPane.showMessageDialog(null,
+                          "Guardar archivo: " + selectedFile.getName(),
+                          "Guardar",
+                          JOptionPane.INFORMATION_MESSAGE);
+              }
        });
     }
 
