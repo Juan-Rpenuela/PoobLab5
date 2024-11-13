@@ -18,7 +18,9 @@ public class Clustering_GUI extends JFrame {
     private JMenuItem createTileMenuItem;
     private JMenuItem deleteTileMenuItem;
     private JMenuItem exitGameMenuItem;
-
+    private JMenuItem nuevo;
+    private JMenuItem open;
+    private JMenuItem save;
     /*Scores*/
     private JLabel textScore;
     private JLabel score;
@@ -44,11 +46,17 @@ public class Clustering_GUI extends JFrame {
         config = new JMenu("Configuracion");
         menuBar.add(menu);
         menuBar.add(config);
-        createTileMenuItem = new JMenuItem("Create Tile");
+        createTileMenuItem = new JMenuItem("Crear ficha");
         menu.add(createTileMenuItem);
-        deleteTileMenuItem = new JMenuItem("Delete Tile");
+        nuevo = new JMenuItem("Nuevo");
+        menu.add(nuevo);
+        open = new JMenuItem("Abrir");
+        menu.add(open);
+        save = new JMenuItem("Salvar");
+        menu.add(save);
+        deleteTileMenuItem = new JMenuItem("Borrar ficha");
         menu.add(deleteTileMenuItem);
-        exitGameMenuItem = new  JMenuItem("Exit");
+        exitGameMenuItem = new  JMenuItem("Salir");
         menu.add(exitGameMenuItem);
         this.setJMenuBar(menuBar);
         this.setSize(PREFERED_DIMENSION);
@@ -64,6 +72,18 @@ public class Clustering_GUI extends JFrame {
                 System.exit(0);
             }
         });
+
+       exitGameMenuItem.addActionListener(e->{
+          int confirm = JOptionPane.showConfirmDialog(
+                  null,
+                  "Estas seguro de que quieres salir?",
+                  "Confirmar",
+                    JOptionPane.YES_NO_OPTION
+                  );
+          if (confirm == JOptionPane.YES_OPTION){
+              System.exit(0);
+          }
+       });
     }
 
 }
