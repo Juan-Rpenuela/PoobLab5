@@ -4,6 +4,8 @@ import javax.swing.*;
 import Clustering.src.domain.Clustering;
 
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
@@ -31,7 +33,7 @@ public class Clustering_GUI extends JFrame {
     /*Tablero*/
     private JPanel board;
     private Canvas canvas;
-    private JPanel[][] cells;
+    private JButton[][] cells;
     /*Botones*/
     private JButton up;
     private JButton down;
@@ -122,17 +124,31 @@ public class Clustering_GUI extends JFrame {
         board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
         // Inicializar la matriz de celdas
-        cells = new JPanel[boardSize][boardSize];
+        cells = new JButton[boardSize][boardSize];
 
         // Llenar el tablero con celdas de colores aleatorios
         for (int row = 0; row < boardSize; row++) {
             for (int col = 0; col < boardSize; col++) {
-                JPanel cell = new JPanel();
-                cell.setBackground(getRandomColor()); // Color inicial aleatorio para cada celda
-                cells[row][col] = cell; // Guardar la celda en la matriz
-                board.add(cell);   // Añadir la celda al panel del tablero
+                JButton cell = new JButton();
+                cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
+
+                //ciclo4
+                cell.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Color selectedColor = JColorChooser.showDialog(null, "Selecciona un color", cell.getBackground());
+                        if (selectedColor != null){
+                            cell.setBackground(selectedColor);
+                        }
+                    }
+                });
+
+                cells[row][col] = cell; // Guardamos la celda en la matriz
+                board.add(cell);   // Añadimos la celda al panel del tablero
             }
         }
+
+
 
         // Añadir el panel de tablero a la ventana principal
         this.add(board, BorderLayout.CENTER);
