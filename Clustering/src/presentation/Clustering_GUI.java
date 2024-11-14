@@ -31,6 +31,7 @@ public class Clustering_GUI extends JFrame {
     /*Tablero*/
     private JPanel board;
     private Canvas canvas;
+    private JPanel[][] cells;
     /*Botones*/
     private JButton up;
     private JButton down;
@@ -109,24 +110,48 @@ public class Clustering_GUI extends JFrame {
         infoPanel.add(moves);
         this.add(infoPanel, BorderLayout.EAST);
 
-        prepareElementsBoard();
+//        prepareElementsBoard();
+        prepareElementsBoard(10);
+
 
     }
 
-    private void prepareElementsBoard(){
-        //Panel de tablero
-        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
-        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
-        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
+    public void prepareElementsBoard(int boardSize) {
+        // Inicializar el panel del tablero
+        board = new JPanel(new GridLayout(boardSize, boardSize, 5, 5));
+        board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
+        // Inicializar la matriz de celdas
+        cells = new JPanel[boardSize][boardSize];
 
-        initCanvas(400, 400);
-        board.add(canvas, BorderLayout.CENTER);
+        // Llenar el tablero con celdas de colores aleatorios
+        for (int row = 0; row < boardSize; row++) {
+            for (int col = 0; col < boardSize; col++) {
+                JPanel cell = new JPanel();
+                cell.setBackground(getRandomColor()); // Color inicial aleatorio para cada celda
+                cells[row][col] = cell; // Guardar la celda en la matriz
+                board.add(cell);   // Añadir la celda al panel del tablero
+            }
+        }
 
-
+        // Añadir el panel de tablero a la ventana principal
         this.add(board, BorderLayout.CENTER);
     }
-    
+
+//    private void prepareElementsBoard(){
+//        //Panel de tablero
+//        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
+//        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
+//        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
+//
+//
+//        initCanvas(400, 400);
+//        board.add(canvas, BorderLayout.CENTER);
+//
+//
+//        this.add(board, BorderLayout.CENTER);
+//    }
+
     private void refresh(){}
 
     private void prepareActions() {
@@ -176,10 +201,15 @@ public class Clustering_GUI extends JFrame {
               }
        });
     }
-    public void initCanvas(int width, int height) {
-        this.canvas = new Canvas();
-        this.canvas.setSize(width, height);
-        canvas.setBackground(Color.BLACK);
+    private Color getRandomColor() {
+        Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE};
+        int randomIndex = (int) (Math.random() * colors.length);
+        return colors[randomIndex];
     }
+//    public void initCanvas(int width, int height) {
+//        this.canvas = new Canvas();
+//        this.canvas.setSize(width, height);
+//        canvas.setBackground(Color.BLACK);
+//    }
 
 }
