@@ -78,9 +78,7 @@ public class Clustering_GUI extends JFrame {
         this.setVisible(true);
         this.setLocationRelativeTo(null);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        //Ciclo3
 
-        //Panel de movimientos
         JPanel movementPanel = new JPanel();
         movementPanel.setLayout(new GridLayout(3,3,5,5));
         movementPanel.setPreferredSize(new Dimension(200,200));
@@ -113,47 +111,44 @@ public class Clustering_GUI extends JFrame {
         this.add(infoPanel, BorderLayout.EAST);
 
 //        prepareElementsBoard();
-        prepareElementsBoard(10);
+        prepareElementsBoard(10,10);
 
 
     }
 
-    public void prepareElementsBoard(int boardSize) {
-        // Inicializar el panel del tablero
-        board = new JPanel(new GridLayout(boardSize, boardSize, 5, 5));
-        board.setBorder(new EmptyBorder(10, 10, 10, 10));
+public void prepareElementsBoard(int m, int n) {
+    // Inicializar el panel del tablero
+    board = new JPanel(new GridLayout(m, n, 5, 5));
+    board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Inicializar la matriz de celdas
-        cells = new JButton[boardSize][boardSize];
+    // Inicializar la matriz de celdas
+    cells = new JButton[m][n];
 
-        // Llenar el tablero con celdas de colores aleatorios
-        for (int row = 0; row < boardSize; row++) {
-            for (int col = 0; col < boardSize; col++) {
-                JButton cell = new JButton();
-                cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
+    // Llenar el tablero con celdas de colores aleatorios
+    for (int row = 0; row < m; row++) {
+        for (int col = 0; col < n; col++) {
+            JButton cell = new JButton();
+            cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
 
-                //ciclo4
-                cell.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        Color selectedColor = JColorChooser.showDialog(null, "Selecciona un color", cell.getBackground());
-                        if (selectedColor != null){
-                            cell.setBackground(selectedColor);
-                        }
+            // Añadir ActionListener a cada celda
+            cell.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    Color selectedColor = JColorChooser.showDialog(null, "Selecciona un color", cell.getBackground());
+                    if (selectedColor != null) {
+                        cell.setBackground(selectedColor);
                     }
-                });
+                }
+            });
 
-                cells[row][col] = cell; // Guardamos la celda en la matriz
-                board.add(cell);   // Añadimos la celda al panel del tablero
-            }
+            cells[row][col] = cell; // Guardamos la celda en la matriz
+            board.add(cell);   // Añadimos la celda al panel del tablero
         }
-
-
-
-        // Añadir el panel de tablero a la ventana principal
-        this.add(board, BorderLayout.CENTER);
     }
 
+    // Añadir el panel de tablero a la ventana principal
+    this.add(board, BorderLayout.CENTER);
+}
 //    private void prepareElementsBoard(){
 //        //Panel de tablero
 //        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
