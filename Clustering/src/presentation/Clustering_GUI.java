@@ -8,6 +8,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
+import javax.swing.border.EmptyBorder;
+
 public class Clustering_GUI extends JFrame {
 
     private final Clustering game;
@@ -23,10 +25,18 @@ public class Clustering_GUI extends JFrame {
     private JMenuItem open;
     private JMenuItem save;
     /*Scores*/
-    private JLabel textScore;
+
     private JLabel score;
-    private JLabel textMoves;
     private JLabel moves;
+    /*Tablero*/
+    private JPanel board;
+    private Canvas canvas;
+    /*Botones*/
+    private JButton up;
+    private JButton down;
+    private JButton left;
+    private JButton right;
+
 
     public Clustering_GUI(){
         this.game = new Clustering();
@@ -44,6 +54,7 @@ public class Clustering_GUI extends JFrame {
         this.setTitle("Clustering");
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
+        //ciclo1
         config = new JMenu("Configuracion");
         menuBar.add(menu);
         menuBar.add(config);
@@ -63,8 +74,60 @@ public class Clustering_GUI extends JFrame {
         this.setSize(PREFERED_DIMENSION);
         this.setVisible(true);
         this.setLocationRelativeTo(null);
-        //this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        //Ciclo3
+
+        //Panel de movimientos
+        JPanel movementPanel = new JPanel();
+        movementPanel.setLayout(new GridLayout(3,3,5,5));
+        movementPanel.setPreferredSize(new Dimension(200,200));
+        movementPanel.setBorder(new EmptyBorder(20,20,20,20));//añadimos un borde al panel de movimientos.
+        up = new JButton("↑");
+        down = new JButton ("↓");
+        left = new JButton("<-");
+        right = new JButton("->");
+        movementPanel.add(new JLabel());
+        movementPanel.add(up);
+        movementPanel.add(new JLabel());
+        movementPanel.add(left);
+        movementPanel.add(down);
+        movementPanel.add(right);
+        movementPanel.add(new JLabel());
+        movementPanel.add(new JLabel());
+        movementPanel.add(new JLabel());
+        JPanel bottomPanel = new JPanel(new BorderLayout());
+        bottomPanel.add(movementPanel, BorderLayout.EAST);//haacemos un panel a la derecha de la ventana y ubicamos el panel de movimientos a  la derecha.
+        this.add(bottomPanel, BorderLayout.SOUTH);//ubicamos el panel de abajo en la parte inferior de la ventana.
+
+        //Panel de puntajes
+        JPanel infoPanel = new JPanel();
+        infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
+        infoPanel.setBorder(new EmptyBorder(120,30,30,50));
+        score = new JLabel("Puntaje: 0");
+        moves = new JLabel("Movimientos: 0");
+        infoPanel.add(score);
+        infoPanel.add(moves);
+        this.add(infoPanel, BorderLayout.EAST);
+
+        prepareElementsBoard();
+
     }
+
+    private void prepareElementsBoard(){
+        //Panel de tablero
+        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
+        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
+        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
+
+
+        initCanvas(400, 400);
+        board.add(canvas, BorderLayout.CENTER);
+
+
+        this.add(board, BorderLayout.CENTER);
+    }
+    
+    private void refresh(){}
 
     private void prepareActions() {
         this.addWindowListener(new WindowAdapter() {
@@ -86,7 +149,7 @@ public class Clustering_GUI extends JFrame {
               System.exit(0);
           }
        });
-
+        //ciclo2
        //Acción de abrir archivos
        open.addActionListener(e->{
            JFileChooser fileChooser = new JFileChooser();
@@ -99,6 +162,7 @@ public class Clustering_GUI extends JFrame {
                        JOptionPane.INFORMATION_MESSAGE);
            }
        });
+       //ciclo2
         //Acción de guardar archivos
        save.addActionListener(e->{
               JFileChooser fileChooser = new JFileChooser();
@@ -111,6 +175,11 @@ public class Clustering_GUI extends JFrame {
                           JOptionPane.INFORMATION_MESSAGE);
               }
        });
+    }
+    public void initCanvas(int width, int height) {
+        this.canvas = new Canvas();
+        this.canvas.setSize(width, height);
+        canvas.setBackground(Color.BLACK);
     }
 
 }
