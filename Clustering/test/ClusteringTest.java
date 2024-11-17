@@ -31,7 +31,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveUp_movesTileToEmptySpace() {
+    public void shouldMoveUp_movesTileToEmptySpace() {
         board[2][1].setBackground(Color.RED);
         clustering.moveUp();
         assertEquals(Color.RED, board[1][1].getBackground());
@@ -39,7 +39,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveDown_movesTileToEmptySpace() {
+    public void shouldMoveDown_movesTileToEmptySpace() {
         board[0][1].setBackground(Color.RED);
         clustering.moveDown();
         assertEquals(Color.RED, board[1][1].getBackground());
@@ -47,7 +47,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveLeft_movesTileToEmptySpace() {
+    public void shouldMoveLeft_movesTileToEmptySpace() {
         board[1][2].setBackground(Color.RED);
         clustering.moveLeft();
         assertEquals(Color.RED, board[1][1].getBackground());
@@ -55,7 +55,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveRight_movesTileToEmptySpace() {
+    public void shouldMoveRight_movesTileToEmptySpace() {
         board[1][0].setBackground(Color.RED);
         clustering.moveRight();
         assertEquals(Color.RED, board[1][1].getBackground());
@@ -63,7 +63,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveUp_doesNotMoveTileToNonEmptySpace() {
+    public void shouldNotMoveUp_doesNotMoveTileToNonEmptySpace() {
         board[2][1].setBackground(Color.RED);
         board[1][1].setBackground(Color.BLUE);
         clustering.moveUp();
@@ -72,7 +72,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveDown_doesNotMoveTileToNonEmptySpace() {
+    public void shouldNotMoveDown_doesNotMoveTileToNonEmptySpace() {
         board[0][1].setBackground(Color.RED);
         board[1][1].setBackground(Color.BLUE);
         clustering.moveDown();
@@ -81,7 +81,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveLeft_doesNotMoveTileToNonEmptySpace() {
+    public void shouldNotMoveLeft_doesNotMoveTileToNonEmptySpace() {
         board[1][2].setBackground(Color.RED);
         board[1][1].setBackground(Color.BLUE);
         clustering.moveLeft();
@@ -90,7 +90,7 @@ public class ClusteringTest {
     }
 
     @Test
-    public void moveRight_doesNotMoveTileToNonEmptySpace() {
+    public void shouldNotMoveRight_doesNotMoveTileToNonEmptySpace() {
         board[1][0].setBackground(Color.RED);
         board[1][1].setBackground(Color.BLUE);
         clustering.moveRight();

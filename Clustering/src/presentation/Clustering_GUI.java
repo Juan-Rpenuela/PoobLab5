@@ -13,12 +13,16 @@ import java.io.File;
 import javax.swing.JFileChooser;
 import javax.swing.border.EmptyBorder;
 
+/**
+ * La clase Clustering\_GUI representa la interfaz gráfica de usuario para el juego de Clustering.
+ * Extiende JFrame e incluye todos los elementos necesarios para interactuar con el juego.
+ */
 public class Clustering_GUI extends JFrame {
 
     private Clustering game;
     private boolean isGameStarted;
     private static final Dimension PREFERED_DIMENSION = new Dimension(1000,700);
-    /*Barra superior*/
+    /* Barra superior */
     private JMenuBar menuBar;
     private JMenu menu;
     private JMenu config;
@@ -28,15 +32,14 @@ public class Clustering_GUI extends JFrame {
     private JMenuItem nuevo;
     private JMenuItem open;
     private JMenuItem save;
-    /*Scores*/
-
+    /* Puntajes */
     private JLabel score;
     private JLabel moves;
-    /*Tablero*/
+    /* Tablero */
     private JPanel board;
     private Canvas canvas;
     private Tile[][] cells;
-    /*Botones*/
+    /* Botones */
     private JButton up;
     private JButton down;
     private JButton left;
@@ -45,11 +48,14 @@ public class Clustering_GUI extends JFrame {
     private JButton restart;
     private JButton changeSize;
 
-    /*move And scores*/
+    /* Movimientos y puntajes */
     private int moveCount;
     private int scoreCount;
 
-
+    /**
+     * Constructor de Clustering\_GUI.
+     * Inicializa los elementos y acciones de la interfaz gráfica.
+     */
     public Clustering_GUI(){
         this.prepareElements();
         this.game = new Clustering(cells);
@@ -58,16 +64,22 @@ public class Clustering_GUI extends JFrame {
         this.isGameStarted = false;
     }
 
-
+    /**
+     * Método principal para iniciar la aplicación.
+     *
+     * @param args Argumentos de la línea de comandos.
+     */
     public static void main(String[] args){
         Clustering_GUI gui = new Clustering_GUI();
     }
 
+    /**
+     * Prepara los elementos de la interfaz gráfica.
+     */
     private void prepareElements(){
         this.setTitle("Clustering");
         menuBar = new JMenuBar();
         menu = new JMenu("Menu");
-        //ciclo1
         config = new JMenu("Configuracion");
         menuBar.add(menu);
         menuBar.add(config);
@@ -81,7 +93,7 @@ public class Clustering_GUI extends JFrame {
         menu.add(save);
         deleteTileMenuItem = new JMenuItem("Borrar ficha");
         menu.add(deleteTileMenuItem);
-        exitGameMenuItem = new  JMenuItem("Salir");
+        exitGameMenuItem = new JMenuItem("Salir");
         menu.add(exitGameMenuItem);
         this.setJMenuBar(menuBar);
         this.setSize(PREFERED_DIMENSION);
@@ -92,7 +104,7 @@ public class Clustering_GUI extends JFrame {
         JPanel movementPanel = new JPanel();
         movementPanel.setLayout(new GridLayout(3,3,5,5));
         movementPanel.setPreferredSize(new Dimension(200,200));
-        movementPanel.setBorder(new EmptyBorder(20,20,20,20));//añadimos un borde al panel de movimientos.
+        movementPanel.setBorder(new EmptyBorder(20,20,20,20));
         up = new JButton("↑");
         down = new JButton ("↓");
         left = new JButton("←");
@@ -107,10 +119,9 @@ public class Clustering_GUI extends JFrame {
         movementPanel.add(new JLabel());
         movementPanel.add(new JLabel());
         JPanel bottomPanel = new JPanel(new BorderLayout());
-        bottomPanel.add(movementPanel, BorderLayout.EAST);//haacemos un panel a la derecha de la ventana y ubicamos el panel de movimientos a  la derecha.
-        this.add(bottomPanel, BorderLayout.SOUTH);//ubicamos el panel de abajo en la parte inferior de la ventana.
+        bottomPanel.add(movementPanel, BorderLayout.EAST);
+        this.add(bottomPanel, BorderLayout.SOUTH);
 
-        //Panel de puntajes
         JPanel infoPanel = new JPanel();
         infoPanel.setLayout(new BoxLayout(infoPanel, BoxLayout.Y_AXIS));
         infoPanel.setBorder(new EmptyBorder(120,30,30,50));
@@ -120,7 +131,6 @@ public class Clustering_GUI extends JFrame {
         infoPanel.add(moves);
         this.add(infoPanel, BorderLayout.EAST);
 
-//        prepareElementsBoard();
         prepareElementsBoard(10,10);
 
         JPanel startPanel = new JPanel();
@@ -137,32 +147,32 @@ public class Clustering_GUI extends JFrame {
         startPanel.add(changeSize);
         bottomPanel.add(startPanel, BorderLayout.WEST);
 
-        //Deshabilitados los botones de movimiento antes de iniciar el juego
         up.setEnabled(false);
         down.setEnabled(false);
         left.setEnabled(false);
         right.setEnabled(false);
-
     }
 
+    /**
+     * Prepara el tablero de juego con el tamaño especificado.
+     *
+     * @param m Número de filas.
+     * @param n Número de columnas.
+     */
     public void prepareElementsBoard(int m, int n) {
-        // Inicializar el panel del tablero
         if (board != null) {
             this.remove(board);
         }
         board = new JPanel(new GridLayout(m, n, 5, 5));
         board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-        // Inicializar la matriz de celdas
         cells = new Tile[m][n];
 
-        // Llenar el tablero con celdas de colores aleatorios
         for (int row = 0; row < m; row++) {
             for (int col = 0; col < n; col++) {
                 Tile cell = new Tile();
-                cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
+                cell.setBackground(getRandomColor());
 
-                // Añadir ActionListener a cada celda
                 cell.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -170,21 +180,22 @@ public class Clustering_GUI extends JFrame {
                         if (selectedColor != null && !cell.getBackground().equals(Color.WHITE)) {
                             cell.setBackground(selectedColor);
                         }
-
                     }
                 });
 
-                cells[row][col] = cell; // Guardamos la celda en la matriz
-                board.add(cell);// Añadimos la celda al panel del tablero;
+                cells[row][col] = cell;
+                board.add(cell);
             }
         }
 
-        // Añadir el panel de tablero a la ventana principal
         this.add(board, BorderLayout.CENTER);
         this.revalidate();
         this.repaint();
     }
 
+    /**
+     * Refresca el estado del tablero de juego.
+     */
     private void refresh() {
         Tile[][] boardState = game.getBoard();
         for (int i = 0; i < boardState.length; i++) {
@@ -194,6 +205,9 @@ public class Clustering_GUI extends JFrame {
         }
     }
 
+    /**
+     * Prepara las acciones de los elementos de la interfaz gráfica.
+     */
     private void prepareActions() {
         this.addWindowListener(new WindowAdapter() {
             public void windowClosing(WindowEvent ev) {
@@ -202,7 +216,6 @@ public class Clustering_GUI extends JFrame {
             }
         });
 
-        //Acción de salir
         exitGameMenuItem.addActionListener(e->{
             int confirm = JOptionPane.showConfirmDialog(
                     null,
@@ -214,8 +227,7 @@ public class Clustering_GUI extends JFrame {
                 System.exit(0);
             }
         });
-        //ciclo2
-        //Acción de abrir archivos
+
         open.addActionListener(e->{
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showOpenDialog(null);
@@ -227,8 +239,7 @@ public class Clustering_GUI extends JFrame {
                         JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        //ciclo2
-        //Acción de guardar archivos
+
         save.addActionListener(e->{
             JFileChooser fileChooser = new JFileChooser();
             int result = fileChooser.showSaveDialog(null);
@@ -241,41 +252,41 @@ public class Clustering_GUI extends JFrame {
             }
         });
 
-        // Acciones de movimiento
-        up.addActionListener(e -> {game.moveUp(
-        );
+        up.addActionListener(e -> {
+            game.moveUp();
             incrementMoves();
             refresh();
+            updateScore();
         });
-        down.addActionListener(e -> {game.moveDown()
-        ;
+        down.addActionListener(e -> {
+            game.moveDown();
             incrementMoves();
             refresh();
+            updateScore();
         });
-        left.addActionListener(e -> {game.moveLeft()
-        ;
+        left.addActionListener(e -> {
+            game.moveLeft();
             incrementMoves();
             refresh();
+            updateScore();
         });
-        right.addActionListener(e -> {game.moveRight()
-        ;
+        right.addActionListener(e -> {
+            game.moveRight();
             incrementMoves();
             refresh();
+            updateScore();
         });
-//ciclo6
+
         play.addActionListener(e -> {
-            // Acción que se realiza cuando se presiona el botón play
             game = new Clustering(cells);
             refresh();
-            isGameStarted = true; // El juego comienza
-            // Habilita los botones de movimiento
+            isGameStarted = true;
             up.setEnabled(true);
             down.setEnabled(true);
             left.setEnabled(true);
             right.setEnabled(true);
         });
 
-        //Ciclo 7
         restart.addActionListener(e -> {
             prepareElementsBoard(10, 10);
             game = new Clustering(cells);
@@ -286,8 +297,6 @@ public class Clustering_GUI extends JFrame {
             refresh();
         });
 
-
-        //Ciclo 8
         changeSize.addActionListener(e -> {
             String rows = JOptionPane.showInputDialog("Ingrese el número de filas:");
             String cols = JOptionPane.showInputDialog("Ingrese el número de columnas:");
@@ -307,29 +316,32 @@ public class Clustering_GUI extends JFrame {
                 }
             }
         });
-
     }
 
+    /**
+     * Obtiene un color aleatorio de una lista de colores predefinidos.
+     *
+     * @return Un color aleatorio.
+     */
     private Color getRandomColor() {
         Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE};
         int randomIndex = (int) (Math.random() * colors.length);
         return colors[randomIndex];
     }
-    //ciclo6
+
+    /**
+     * Incrementa el contador de movimientos y actualiza la etiqueta correspondiente.
+     */
     private void incrementMoves() {
         moveCount++;
         moves.setText("Movimientos: " + moveCount);
     }
 
+    /**
+     * Actualiza la puntuación y la etiqueta correspondiente.
+     */
     private void updateScore() {
         scoreCount = game.calculateScore();
         score.setText("Puntaje: " + scoreCount);
     }
-
-//    public void initCanvas(int width, int height) {
-//        this.canvas = new Canvas();
-//        this.canvas.setSize(width, height);
-//        canvas.setBackground(Color.BLACK);
-//    }
-
 }
