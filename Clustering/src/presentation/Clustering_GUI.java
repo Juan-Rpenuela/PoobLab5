@@ -1,7 +1,8 @@
-package src.presentation;
+package Clustering.src.presentation;
 
 import javax.swing.*;
-import src.domain.Clustering;
+import Clustering.src.domain.Clustering;
+import Clustering.src.domain.Tile;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -33,7 +34,7 @@ public class Clustering_GUI extends JFrame {
     /*Tablero*/
     private JPanel board;
     private Canvas canvas;
-    private JButton[][] cells;
+    private Tile[][] cells;
     /*Botones*/
     private JButton up;
     private JButton down;
@@ -42,8 +43,8 @@ public class Clustering_GUI extends JFrame {
 
 
     public Clustering_GUI(){
-        this.game = new Clustering();
         this.prepareElements();
+        this.game = new Clustering(cells);
         this.prepareActions();
         this.setVisible(true);
     }
@@ -116,47 +117,57 @@ public class Clustering_GUI extends JFrame {
 
     }
 
-public void prepareElementsBoard(int m, int n) {
-    // Inicializar el panel del tablero
-    board = new JPanel(new GridLayout(m, n, 5, 5));
-    board.setBorder(new EmptyBorder(10, 10, 10, 10));
+    public void prepareElementsBoard(int m, int n) {
+        // Inicializar el panel del tablero
+        board = new JPanel(new GridLayout(m, n, 5, 5));
+        board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
-    // Inicializar la matriz de celdas
-    cells = new JButton[m][n];
+        // Inicializar la matriz de celdas
+        cells = new Tile[m][n];
 
-    // Llenar el tablero con celdas de colores aleatorios
-    for (int row = 0; row < m; row++) {
-        for (int col = 0; col < n; col++) {
-            JButton cell = new JButton();
-            cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
+        // Llenar el tablero con celdas de colores aleatorios
+        for (int row = 0; row < m; row++) {
+            for (int col = 0; col < n; col++) {
+                Tile cell = new Tile();
+                cell.setBackground(getRandomColor()); // inicializamos con un color aleatorio para cada celda
 
-            // Añadir ActionListener a cada celda
-            cell.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    Color selectedColor = JColorChooser.showDialog(null, "Selecciona un color", cell.getBackground());
-                    if (selectedColor != null) {
-                        cell.setBackground(selectedColor);
+                // Añadir ActionListener a cada celda
+                cell.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        Color selectedColor = JColorChooser.showDialog(null, "Selecciona un color", cell.getBackground());
+                        if (selectedColor != null && !cell.getBackground().equals(Color.WHITE)) {
+                            cell.setBackground(selectedColor);
+                        }
+
                     }
-                }
-            });
+                });
 
-            cells[row][col] = cell; // Guardamos la celda en la matriz
-            board.add(cell);   // Añadimos la celda al panel del tablero
+                cells[row][col] = cell; // Guardamos la celda en la matriz
+                board.add(cell);// Añadimos la celda al panel del tablero;
+            }
         }
+
+        // Añadir el panel de tablero a la ventana principal
+        this.add(board, BorderLayout.CENTER);
     }
+//    private void prepareElementsBoard(){
+//        //Panel de tablero
+//        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
+//        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
+//        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
+//
+//
+//        initCanvas(400, 400);
+//        board.add(canvas, BorderLayout.CENTER);
+//
+//
+//        this.add(board, BorderLayout.CENTER);
+//    }
 
-    // Añadir el panel de tablero a la ventana principal
-    this.add(board, BorderLayout.CENTER);
+    private void refresh(){}
 
-    // Set the board in the game instance
-    game.setBoard(cells);
-}
 
-    private void refresh(){
-        board.revalidate();
-        board.repaint();
-    }
 
     private void prepareActions() {
         this.addWindowListener(new WindowAdapter() {
@@ -167,63 +178,49 @@ public void prepareElementsBoard(int m, int n) {
         });
 
         //Acción de salir
-       exitGameMenuItem.addActionListener(e->{
-          int confirm = JOptionPane.showConfirmDialog(
-                  null,
-                  "Estas seguro de que quieres salir?",
-                  "Confirmar",
+        exitGameMenuItem.addActionListener(e->{
+            int confirm = JOptionPane.showConfirmDialog(
+                    null,
+                    "Estas seguro de que quieres salir?",
+                    "Confirmar",
                     JOptionPane.YES_NO_OPTION
-                  );
-          if (confirm == JOptionPane.YES_OPTION){
-              System.exit(0);
-          }
-       });
+            );
+            if (confirm == JOptionPane.YES_OPTION){
+                System.exit(0);
+            }
+        });
         //ciclo2
-       //Acción de abrir archivos
-       open.addActionListener(e->{
-           JFileChooser fileChooser = new JFileChooser();
-           int result = fileChooser.showOpenDialog(null);
-           if (result == JFileChooser.APPROVE_OPTION){
-               File selectedFile = fileChooser.getSelectedFile();
-               JOptionPane.showMessageDialog(null,
-                       "Abrir archivo: " + selectedFile.getName(),
-                       "Abrir",
-                       JOptionPane.INFORMATION_MESSAGE);
-           }
-       });
-       //ciclo2
-        //Acción de guardar archivos
-       save.addActionListener(e->{
-              JFileChooser fileChooser = new JFileChooser();
-              int result = fileChooser.showSaveDialog(null);
-              if (result == JFileChooser.APPROVE_OPTION){
+        //Acción de abrir archivos
+        open.addActionListener(e->{
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showOpenDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION){
                 File selectedFile = fileChooser.getSelectedFile();
                 JOptionPane.showMessageDialog(null,
-                          "Guardar archivo: " + selectedFile.getName(),
-                          "Guardar",
-                          JOptionPane.INFORMATION_MESSAGE);
-              }
-       });
+                        "Abrir archivo: " + selectedFile.getName(),
+                        "Abrir",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        //ciclo2
+        //Acción de guardar archivos
+        save.addActionListener(e->{
+            JFileChooser fileChooser = new JFileChooser();
+            int result = fileChooser.showSaveDialog(null);
+            if (result == JFileChooser.APPROVE_OPTION){
+                File selectedFile = fileChooser.getSelectedFile();
+                JOptionPane.showMessageDialog(null,
+                        "Guardar archivo: " + selectedFile.getName(),
+                        "Guardar",
+                        JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+        // Acciones de movimiento
+        up.addActionListener(e -> game.moveUp());
+        down.addActionListener(e -> game.moveDown());
+        left.addActionListener(e -> game.moveLeft());
+        right.addActionListener(e -> game.moveRight());
 
-       up.addActionListener(e -> {
-           game.tilt("UP");
-           refresh();
-       });
-
-       down.addActionListener(e -> {
-           game.tilt("DOWN");
-           refresh();
-       });
-
-       left.addActionListener(e -> {
-           game.tilt("LEFT");
-           refresh();
-       });
-
-       right.addActionListener(e -> {
-           game.tilt("RIGHT");
-           refresh();
-       });
     }
     private Color getRandomColor() {
         Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE};
