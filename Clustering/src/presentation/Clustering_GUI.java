@@ -42,6 +42,7 @@ public class Clustering_GUI extends JFrame {
     private JButton left;
     private JButton right;
     private JButton play;
+    private JButton restart;
 
     /*move And scores*/
     private int moveCount;
@@ -124,9 +125,12 @@ public class Clustering_GUI extends JFrame {
         JPanel startPanel = new JPanel();
         startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
         play = new JButton("Jugar");
+        restart = new JButton("Reiniciar");
         startPanel.setBorder(new EmptyBorder(10,10,10,10));
         play.setPreferredSize(new Dimension(100,50));
         startPanel.add(play);
+        startPanel.add(Box.createVerticalStrut(10));
+        startPanel.add(restart);
         bottomPanel.add(startPanel, BorderLayout.CENTER);
 
         //Deshabilitados los botones de movimiento antes de iniciar el juego
@@ -276,7 +280,19 @@ public class Clustering_GUI extends JFrame {
             left.setEnabled(true);
             right.setEnabled(true);
         });
+
+        //Ciclo 7
+        restart.addActionListener(e -> {
+            prepareElementsBoard(10, 10);
+            game = new Clustering(cells);
+            moveCount = 0;
+            scoreCount = 0;
+            moves.setText("Movimientos: " + moveCount);
+            score.setText("Puntaje: " + scoreCount);
+            refresh();
+        });
     }
+
     private Color getRandomColor() {
         Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE};
         int randomIndex = (int) (Math.random() * colors.length);
