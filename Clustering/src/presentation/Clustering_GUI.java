@@ -43,6 +43,7 @@ public class Clustering_GUI extends JFrame {
     private JButton right;
     private JButton play;
     private JButton restart;
+    private JButton changeSize;
 
     /*move And scores*/
     private int moveCount;
@@ -126,12 +127,15 @@ public class Clustering_GUI extends JFrame {
         startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
         play = new JButton("Jugar");
         restart = new JButton("Reiniciar");
+        changeSize = new JButton("Cambiar Tamaño");
         startPanel.setBorder(new EmptyBorder(10,10,10,10));
         play.setPreferredSize(new Dimension(100,50));
         startPanel.add(play);
         startPanel.add(Box.createVerticalStrut(10));
         startPanel.add(restart);
-        bottomPanel.add(startPanel, BorderLayout.CENTER);
+        startPanel.add(Box.createVerticalStrut(10));
+        startPanel.add(changeSize);
+        bottomPanel.add(startPanel, BorderLayout.WEST);
 
         //Deshabilitados los botones de movimiento antes de iniciar el juego
         up.setEnabled(false);
@@ -143,6 +147,9 @@ public class Clustering_GUI extends JFrame {
 
     public void prepareElementsBoard(int m, int n) {
         // Inicializar el panel del tablero
+        if (board != null) {
+            this.remove(board);
+        }
         board = new JPanel(new GridLayout(m, n, 5, 5));
         board.setBorder(new EmptyBorder(10, 10, 10, 10));
 
@@ -174,20 +181,9 @@ public class Clustering_GUI extends JFrame {
 
         // Añadir el panel de tablero a la ventana principal
         this.add(board, BorderLayout.CENTER);
+        this.revalidate();
+        this.repaint();
     }
-//    private void prepareElementsBoard(){
-//        //Panel de tablero
-//        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
-//        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
-//        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
-//
-//
-//        initCanvas(400, 400);
-//        board.add(canvas, BorderLayout.CENTER);
-//
-//
-//        this.add(board, BorderLayout.CENTER);
-//    }
 
     private void refresh() {
         Tile[][] boardState = game.getBoard();
@@ -197,8 +193,6 @@ public class Clustering_GUI extends JFrame {
             }
         }
     }
-
-
 
     private void prepareActions() {
         this.addWindowListener(new WindowAdapter() {
@@ -291,6 +285,29 @@ public class Clustering_GUI extends JFrame {
             score.setText("Puntaje: " + scoreCount);
             refresh();
         });
+
+
+        //Ciclo 8
+        changeSize.addActionListener(e -> {
+            String rows = JOptionPane.showInputDialog("Ingrese el número de filas:");
+            String cols = JOptionPane.showInputDialog("Ingrese el número de columnas:");
+            if (rows != null && cols != null) {
+                try {
+                    int m = Integer.parseInt(rows);
+                    int n = Integer.parseInt(cols);
+                    prepareElementsBoard(m, n);
+                    game = new Clustering(cells);
+                    moveCount = 0;
+                    scoreCount = 0;
+                    moves.setText("Movimientos: " + moveCount);
+                    score.setText("Puntaje: " + scoreCount);
+                    refresh();
+                } catch (NumberFormatException ex) {
+                    JOptionPane.showMessageDialog(null, "Por favor, ingrese números válidos.");
+                }
+            }
+        });
+
     }
 
     private Color getRandomColor() {
