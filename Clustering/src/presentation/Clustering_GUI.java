@@ -15,7 +15,8 @@ import javax.swing.border.EmptyBorder;
 
 public class Clustering_GUI extends JFrame {
 
-    private final Clustering game;
+    private Clustering game;
+    private boolean isGameStarted;
     private static final Dimension PREFERED_DIMENSION = new Dimension(1000,700);
     /*Barra superior*/
     private JMenuBar menuBar;
@@ -40,6 +41,11 @@ public class Clustering_GUI extends JFrame {
     private JButton down;
     private JButton left;
     private JButton right;
+    private JButton play;
+
+    /*move And scores*/
+    private int moveCount;
+    private int scoreCount;
 
 
     public Clustering_GUI(){
@@ -47,6 +53,7 @@ public class Clustering_GUI extends JFrame {
         this.game = new Clustering(cells);
         this.prepareActions();
         this.setVisible(true);
+        this.isGameStarted = false;
     }
 
 
@@ -86,8 +93,8 @@ public class Clustering_GUI extends JFrame {
         movementPanel.setBorder(new EmptyBorder(20,20,20,20));//añadimos un borde al panel de movimientos.
         up = new JButton("↑");
         down = new JButton ("↓");
-        left = new JButton("<-");
-        right = new JButton("->");
+        left = new JButton("←");
+        right = new JButton("→");
         movementPanel.add(new JLabel());
         movementPanel.add(up);
         movementPanel.add(new JLabel());
@@ -114,6 +121,19 @@ public class Clustering_GUI extends JFrame {
 //        prepareElementsBoard();
         prepareElementsBoard(10,10);
 
+        JPanel startPanel = new JPanel();
+        startPanel.setLayout(new BoxLayout(startPanel, BoxLayout.Y_AXIS));
+        play = new JButton("Jugar");
+        startPanel.setBorder(new EmptyBorder(10,10,10,10));
+        play.setPreferredSize(new Dimension(100,50));
+        startPanel.add(play);
+        bottomPanel.add(startPanel, BorderLayout.CENTER);
+
+        //Deshabilitados los botones de movimiento antes de iniciar el juego
+        up.setEnabled(false);
+        down.setEnabled(false);
+        left.setEnabled(false);
+        right.setEnabled(false);
 
     }
 
@@ -165,7 +185,14 @@ public class Clustering_GUI extends JFrame {
 //        this.add(board, BorderLayout.CENTER);
 //    }
 
-    private void refresh(){}
+    private void refresh() {
+        Tile[][] boardState = game.getBoard();
+        for (int i = 0; i < boardState.length; i++) {
+            for (int j = 0; j < boardState[i].length; j++) {
+                cells[i][j].setBackground(boardState[i][j].getBackground());
+            }
+        }
+    }
 
 
 
@@ -215,18 +242,57 @@ public class Clustering_GUI extends JFrame {
                         JOptionPane.INFORMATION_MESSAGE);
             }
         });
-        // Acciones de movimiento
-        up.addActionListener(e -> game.moveUp());
-        down.addActionListener(e -> game.moveDown());
-        left.addActionListener(e -> game.moveLeft());
-        right.addActionListener(e -> game.moveRight());
 
+        // Acciones de movimiento
+        up.addActionListener(e -> {game.moveUp(
+        );
+            incrementMoves();
+            refresh();
+        });
+        down.addActionListener(e -> {game.moveDown()
+        ;
+            incrementMoves();
+            refresh();
+        });
+        left.addActionListener(e -> {game.moveLeft()
+        ;
+            incrementMoves();
+            refresh();
+        });
+        right.addActionListener(e -> {game.moveRight()
+        ;
+            incrementMoves();
+            refresh();
+        });
+//ciclo6
+        play.addActionListener(e -> {
+            // Acción que se realiza cuando se presiona el botón play
+            game = new Clustering(cells);
+            refresh();
+            isGameStarted = true; // El juego comienza
+            // Habilita los botones de movimiento
+            up.setEnabled(true);
+            down.setEnabled(true);
+            left.setEnabled(true);
+            right.setEnabled(true);
+        });
     }
     private Color getRandomColor() {
         Color[] colors = {Color.RED, Color.GREEN, Color.BLUE, Color.YELLOW, Color.WHITE};
         int randomIndex = (int) (Math.random() * colors.length);
         return colors[randomIndex];
     }
+    //ciclo6
+    private void incrementMoves() {
+        moveCount++;
+        moves.setText("Movimientos: " + moveCount);
+    }
+
+    private void updateScore() {
+        scoreCount = game.calculateScore();
+        score.setText("Puntaje: " + scoreCount);
+    }
+
 //    public void initCanvas(int width, int height) {
 //        this.canvas = new Canvas();
 //        this.canvas.setSize(width, height);
