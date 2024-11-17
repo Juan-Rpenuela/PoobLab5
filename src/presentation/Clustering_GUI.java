@@ -1,7 +1,7 @@
-package Clustering.src.presentation;
+package src.presentation;
 
 import javax.swing.*;
-import Clustering.src.domain.Clustering;
+import src.domain.Clustering;
 
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -148,22 +148,15 @@ public void prepareElementsBoard(int m, int n) {
 
     // Añadir el panel de tablero a la ventana principal
     this.add(board, BorderLayout.CENTER);
-}
-//    private void prepareElementsBoard(){
-//        //Panel de tablero
-//        board = new JPanel(new BorderLayout()); // Tablero con BorderLayout para ubicar el canva en el centro
-//        board.setBorder(new EmptyBorder(15, 10, 0, 10)); // Añadir un margen alrededor del tablero
-//        board.setPreferredSize(new Dimension(400, 400)); // Tamaño del tablero
-//
-//
-//        initCanvas(400, 400);
-//        board.add(canvas, BorderLayout.CENTER);
-//
-//
-//        this.add(board, BorderLayout.CENTER);
-//    }
 
-    private void refresh(){}
+    // Set the board in the game instance
+    game.setBoard(cells);
+}
+
+    private void refresh(){
+        board.revalidate();
+        board.repaint();
+    }
 
     private void prepareActions() {
         this.addWindowListener(new WindowAdapter() {
@@ -210,6 +203,26 @@ public void prepareElementsBoard(int m, int n) {
                           "Guardar",
                           JOptionPane.INFORMATION_MESSAGE);
               }
+       });
+
+       up.addActionListener(e -> {
+           game.tilt("UP");
+           refresh();
+       });
+
+       down.addActionListener(e -> {
+           game.tilt("DOWN");
+           refresh();
+       });
+
+       left.addActionListener(e -> {
+           game.tilt("LEFT");
+           refresh();
+       });
+
+       right.addActionListener(e -> {
+           game.tilt("RIGHT");
+           refresh();
        });
     }
     private Color getRandomColor() {
